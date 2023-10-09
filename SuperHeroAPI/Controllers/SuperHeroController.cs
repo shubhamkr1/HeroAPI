@@ -23,48 +23,43 @@ namespace SuperHeroAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<SuperHero>>> GetAllHeroes()
         {
-            var result = _superHeroService.GetAllHeroes();
-            return Ok(result);
+            return await _superHeroService.GetAllHeroes();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<SuperHero>> GetSingleHero(int id)
         {
-           var hero = _superHeroService.GetSingleHero(id);
-            if (hero == null)
-            {
-               return  NotFound("Sorry, but this hero does not exist");
-            }
-            return Ok(hero);
+            var result = await _superHeroService.GetSingleHero(id);
+            if (result is null)
+                return NotFound("Hero not found.");
+
+            return Ok(result);
         }
 
         [HttpPost]
         public async Task<ActionResult<List<SuperHero>>> AddHero(SuperHero hero)
         {
-            var result = _superHeroService.AddHero(hero);
+            var result = await _superHeroService.AddHero(hero);
             return Ok(result);
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<List<SuperHero>>> UpdateHero(int id, SuperHero request)
         {
-            var result = _superHeroService.UpdateHero(id, request);
-            if (result == null)
-            {
-                return NotFound("Sorry, but this hero does not exist");
-            }
+            var result = await _superHeroService.UpdateHero(id, request);
+            if (result is null)
+                return NotFound("Hero not found.");
+
             return Ok(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<SuperHero>>> DeleteHero(int id)
         {
-            var result = _superHeroService.DeleteHero(id); 
-            if (result == null)
-            {
-                return NotFound("Sorry, but this hero does not exist");
-            }
-          
+            var result = await _superHeroService.DeleteHero(id);
+            if (result is null)
+                return NotFound("Hero not found.");
+
             return Ok(result);
         }
     }
